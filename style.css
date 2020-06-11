@@ -1,3 +1,22 @@
 body {
   background-color: #386f3c;
 }
+
+#field {
+  width: 344px;
+  height: 683px;
+  border: 1px solid #000;
+  background-color: #f8faec
+}
+
+.block-line {
+
+}
+
+.empty-block {
+  width: 29px;
+  height: 29px;
+  border: 1px solid #000;
+  margin: 3px 0 0 3px;
+  float: left;
+}
