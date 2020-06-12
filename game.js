@@ -33,7 +33,10 @@ class Game {
   }
   addFigureToMatrix(topLine) {
     for (let i = 0; i < 4; i++) {
-      this.matrix[topLine - 4 + i] = this.shape.matrix[i];
+      for (let u = 0; u < 10; u++) {
+        if (this.shape.matrix[i][u] == -1) this.shape.matrix[i][u] = 0;
+        this.matrix[topLine - 4 + i][u] += this.shape.matrix[i][u];
+      }
     }
     this.shape = new IShape();
   }
