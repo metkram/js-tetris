@@ -7,6 +7,9 @@ class Game {
     this.shape = new IShape();
     this.renderField();
     setInterval(() => this.step(), 1000);
+    setTimeout(() => this.shape.move("right"), 7000);
+    setTimeout(() => this.shape.move("left"), 9000);
+    setTimeout(() => this.shape.move("turn"), 11000);
   }
   step() {
     // this.nextFigure();
@@ -15,6 +18,7 @@ class Game {
     if (this.shape.bottomCoordinate == 24) this.shape.bottomCoordinate = 4;
     this.renderField();
   }
+
   // nextFigure() { //maybe I do not need this function if I add bottom figure and renderField will write field
   //   for (let i = 0; i < 4; i++) {
   //     for (let u = 0; u < 10; u++) {
@@ -76,6 +80,32 @@ class Tetromino { //all tetrominoes will be extended from this class
   constructor() {
     this.bottomCoordinate = 4; //add it to render martix
   }
+  move(direction) {
+    switch(direction) {
+      case("right"):
+        for (let position of this.positions) {
+          for (let line of position) {
+            if (line[9] == 0) { //I will improve this check
+              line.unshift(line.pop());
+            }
+          }
+        }
+        break;
+      case("left"):
+        for (let position of this.positions) {
+          for (let line of position) {
+            if (line[0] == 0) { //I will improve this check
+              line.push(line.shift());
+            }
+          }
+        }
+        break;
+      case("turn"):
+        this.positionNumber = this.positionNumber == (this.positions.length - 1) ? 0 : ++this.positionNumber;
+        this.matrix = this.positions[this.positionNumber];
+        break;
+    }
+  }
 }
 
 class IShape extends Tetromino {
@@ -83,19 +113,19 @@ class IShape extends Tetromino {
     super();
     this.positions = [
       [
-        [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 1, 0, 0, 0, 0, 0]
+        [0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 1, 0, 0, 0, 0, 0, 0]
       ],
       [
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, -1, 0, 0, -1, 0, 0, 0],
+        [0, 0, 0, -1, 0, 0, -1, 0, 0, 0],
+        [0, 0, 0, -1, 0, 0, -1, 0, 0, 0],
         [0, 0, 0, 1, 1, 1, 1, 0, 0, 0]
       ]
     ];
-    this.positionNumber = Math.round(Math.random());
+    this.positionNumber = Math.round(Math.random() * (this.positions.length - 1));
     this.matrix = this.positions[this.positionNumber];
   }
 }
