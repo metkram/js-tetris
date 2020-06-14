@@ -4,7 +4,8 @@ class Game {
   constructor() {
     this.field = new Field();
     this.matrix = this.newMatrix();
-    this.shape = new IShape();
+    this.shapePool = [this.newShape(), this.newShape()];
+    this.shape = this.shapePool[0];
     this.renderField();
     setInterval(() => this.step(), 500);
     setTimeout(() => this.shape.move("right"), 1000);
@@ -35,7 +36,9 @@ class Game {
         this.matrix[topLine - 4 + i][u] += this.shape.matrix[i][u];
       }
     }
-    this.shape = new IShape();
+    this.shapePool.shift();
+    this.shapePool.push(this.newShape());
+    this.shape = this.shapePool[0];
   }
 
   // nextFigure() { //maybe I do not need this function if I add bottom figure and renderField will write field
@@ -59,6 +62,11 @@ class Game {
       matrix.push(line);
     }
     return matrix;
+  }
+  newShape() {
+    let pool = [IShape, OShape];
+    let num = Math.floor(Math.random() * pool.length)
+    return new pool[num]();
   }
   renderField() {
     for (let i = 0; i < 24; i++) {
@@ -147,6 +155,22 @@ class IShape extends Tetromino {
         [0, 0, 0, -1, 0, 0, -1, 0, 0, 0],
         [0, 0, 0, -1, 0, 0, -1, 0, 0, 0],
         [0, 0, -0, 1, 1, 1, 1, 0, 0, 0]
+      ]
+    ];
+    this.positionNumber = Math.round(Math.random() * (this.positions.length - 1));
+    this.matrix = this.positions[this.positionNumber];
+  }
+}
+
+class OShape extends Tetromino {
+  constructor() {
+    super();
+    this.positions = [
+      [
+        [0, 0, 0, 0, -1, -1, 0, 0, 0, 0],
+        [0, 0, 0, 0, -1, -1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 1, 0, 0, 0, 0]
       ]
     ];
     this.positionNumber = Math.round(Math.random() * (this.positions.length - 1));
