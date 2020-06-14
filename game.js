@@ -26,10 +26,7 @@ class Game {
         }
       }
     }
-
     this.shape.bottomCoordinate++;
-
-
   }
   addFigureToMatrix(topLine) {
     for (let i = 0; i < 4; i++) {
@@ -58,7 +55,6 @@ class Game {
         } else {
           line.push(0);
         }
-
       }
       matrix.push(line);
     }
@@ -72,10 +68,11 @@ class Game {
     }
     for (let i = 0; i < 24; i++) {
       for (let u = 0; u < 10; u++) {
+        this.field.fieldBlocks[i * 10 + u].innerText = this.matrix[i][u];
         if (i > this.shape.bottomCoordinate - 5 && i < this.shape.bottomCoordinate) {
-          this.field.fieldBlocks[i * 10 + u].innerText = this.shape.matrix[i - this.shape.bottomCoordinate + 4][u];
-        } else {
-          this.field.fieldBlocks[i * 10 + u].innerText = this.matrix[i][u];
+          if (this.matrix[i][u] != 1 && this.shape.matrix[i - this.shape.bottomCoordinate + 4][u] == 1) {
+            this.field.fieldBlocks[i * 10 + u].innerText = this.shape.matrix[i - this.shape.bottomCoordinate + 4][u];
+          }
         }
       }
     }
