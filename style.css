@@ -20,3 +20,28 @@ body {
   margin: 3px 0 0 3px;
   float: left;
 }
+
+.IShape {
+  background-color: #00FFFF;
+}
+.OShape {
+  background-color: #FFFF00;
+}
+.LShape {
+  background-color: #FFA500;
+}
+.JShape {
+  background-color: #0000FF;
+}
+.ZShape {
+  background-color: #FF0000;
+}
+.SShape {
+  background-color: #90EE90;
+}
+.TShape {
+  background-color: #EE82EE;
+}
+.ground {
+  background-color: #808080;
+}

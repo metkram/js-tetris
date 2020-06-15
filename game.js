@@ -36,6 +36,14 @@ class Game {
         this.matrix[topLine - 4 + i][u] += this.shape.matrix[i][u];
       }
     }
+    for (let i = 0; i < 4; i++) {
+      for (let u = 0; u < 10; u++) {
+        if (this.matrix[i][u] == 1) {
+          console.log("Game over");
+          this.matrix = this.newMatrix();
+        }
+      }
+    }
     this.shapePool.shift();
     this.shapePool.push(this.newShape());
     this.shape = this.shapePool[0];
@@ -72,14 +80,17 @@ class Game {
     for (let i = 0; i < 24; i++) {
       for (let u = 0; u < 10; u++) {
         this.field.fieldBlocks[i * 10 + u].innerText = 0;
+        this.field.fieldBlocks[i * 10 + u].className = "empty-block";
       }
     }
     for (let i = 0; i < 24; i++) {
       for (let u = 0; u < 10; u++) {
+        if (this.matrix[i][u] == 1) this.field.fieldBlocks[i * 10 + u].classList.add("ground");
         this.field.fieldBlocks[i * 10 + u].innerText = this.matrix[i][u];
         if (i > this.shape.bottomCoordinate - 5 && i < this.shape.bottomCoordinate) {
           if (this.matrix[i][u] != 1 && this.shape.matrix[i - this.shape.bottomCoordinate + 4][u] == 1) {
             this.field.fieldBlocks[i * 10 + u].innerText = this.shape.matrix[i - this.shape.bottomCoordinate + 4][u];
+            this.field.fieldBlocks[i * 10 + u].classList.add(this.shape.constructor.name);
           }
         }
       }
@@ -110,7 +121,7 @@ class Field {
 
 class Tetromino { //all tetrominoes will be extended from this class
   constructor() {
-    this.bottomCoordinate = 4; //add it to render martix
+    this.bottomCoordinate = 3; //add it to render martix
   }
   move(direction) {
     switch(direction) {
