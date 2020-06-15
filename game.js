@@ -19,9 +19,9 @@ class Game {
     // this.nextFigure();
     this.renderField();
     console.log(this.shape.bottomCoordinate);
-    for (let i = 3; i > 1; i--) {
+    for (let i = 3; i > 0; i--) {
       for (let u = 0; u < 10; u++) {
-        if (this.shape.matrix[i][u] == 1 && this.shape.matrix[i][u] == this.matrix[this.shape.bottomCoordinate][u]) {
+        if (this.shape.matrix[i][u] == 1 && this.shape.matrix[i][u] == this.matrix[this.shape.bottomCoordinate - (3 - i)][u]) {
           this.addFigureToMatrix(this.shape.bottomCoordinate);
           break;
         }
@@ -64,7 +64,7 @@ class Game {
     return matrix;
   }
   newShape() {
-    let pool = [IShape, OShape];
+    let pool = [IShape, OShape, LShape, JShape, ZShape, SShape, TShape];
     let num = Math.floor(Math.random() * pool.length)
     return new pool[num]();
   }
@@ -139,7 +139,6 @@ class Tetromino { //all tetrominoes will be extended from this class
     }
   }
 }
-
 class IShape extends Tetromino {
   constructor() {
     super();
@@ -157,11 +156,10 @@ class IShape extends Tetromino {
         [0, 0, -0, 1, 1, 1, 1, 0, 0, 0]
       ]
     ];
-    this.positionNumber = Math.round(Math.random() * (this.positions.length - 1));
+    this.positionNumber = Math.floor(Math.random() * (this.positions.length));
     this.matrix = this.positions[this.positionNumber];
   }
 }
-
 class OShape extends Tetromino {
   constructor() {
     super();
@@ -173,10 +171,150 @@ class OShape extends Tetromino {
         [0, 0, 0, 0, 1, 1, 0, 0, 0, 0]
       ]
     ];
-    this.positionNumber = Math.round(Math.random() * (this.positions.length - 1));
+    this.positionNumber = Math.floor(Math.random() * (this.positions.length));
     this.matrix = this.positions[this.positionNumber];
   }
 }
-
+class LShape extends Tetromino {
+  constructor() {
+    super();
+    this.positions = [
+      [
+        [0, 0, 0, 0, -1, -1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, -1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, -1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 1, 0, 0, 0, 0]
+      ],
+      [
+        [0, 0, 0, 0, -1, 0, -1, 0, 0, 0],
+        [0, 0, 0, 0, -1, 0, -1, 0, 0, 0],
+        [0, 0, 0, 0, -1, 0, 1, 0, 0, 0],
+        [0, 0, 0, 0, 1, 1, 1, 0, 0, 0]
+      ],
+      [
+        [0, 0, 0, 0, -1, -1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
+        [0, 0, 0, 0, -1, 1, 0, 0, 0, 0],
+        [0, 0, 0, 0, -1, 1, 0, 0, 0, 0]
+      ],
+      [
+        [0, 0, 0, 0, -1, 0, -1, 0, 0, 0],
+        [0, 0, 0, 0, -1, 0, -1, 0, 0, 0],
+        [0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+        [0, 0, 0, 0, 1, -1, -1, 0, 0, 0]
+      ]
+    ];
+    this.positionNumber = Math.floor(Math.random() * (this.positions.length));
+    this.matrix = this.positions[this.positionNumber];
+  }
+}
+class JShape extends Tetromino {
+  constructor() {
+    super();
+    this.positions = [
+      [
+        [0, 0, 0, 0, -1, -1, 0, 0, 0, 0],
+        [0, 0, 0, 0, -1, 1, 0, 0, 0, 0],
+        [0, 0, 0, 0, -1, 1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 1, 0, 0, 0, 0]
+      ],
+      [
+        [0, 0, 0, 0, -1, 0, -1, 0, 0, 0],
+        [0, 0, 0, 0, -1, 0, -1, 0, 0, 0],
+        [0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+        [0, 0, 0, 0, -1, -1, 1, 0, 0, 0]
+      ],
+      [
+        [0, 0, 0, 0, -1, -1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, -1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, -1, 0, 0, 0, 0]
+      ],
+      [
+        [0, 0, 0, 0, -1, 0, -1, 0, 0, 0],
+        [0, 0, 0, 0, -1, 0, -1, 0, 0, 0],
+        [0, 0, 0, 0, 1, -1, -1, 0, 0, 0],
+        [0, 0, 0, 0, 1, 1, 1, 0, 0, 0]
+      ]
+    ];
+    this.positionNumber = Math.floor(Math.random() * (this.positions.length));
+    this.matrix = this.positions[this.positionNumber];
+  }
+}
+class ZShape extends Tetromino {
+  constructor() {
+    super();
+    this.positions = [
+      [
+        [0, 0, 0, 0, -1, 0, -1, 0, 0, 0],
+        [0, 0, 0, 0, -1, 0, -1, 0, 0, 0],
+        [0, 0, 0, 0, 1, 1, -1, 0, 0, 0],
+        [0, 0, 0, 0, -1, 1, 1, 0, 0, 0]
+      ],
+      [
+        [0, 0, 0, 0, -1, -1, 0, 0, 0, 0],
+        [0, 0, 0, 0, -1, 1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, -1, 0, 0, 0, 0]
+      ]
+    ];
+    this.positionNumber = Math.floor(Math.random() * (this.positions.length));
+    this.matrix = this.positions[this.positionNumber];
+  }
+}
+class SShape extends Tetromino {
+  constructor() {
+    super();
+    this.positions = [
+      [
+        [0, 0, 0, 0, -1, 0, -1, 0, 0, 0],
+        [0, 0, 0, 0, -1, 0, -1, 0, 0, 0],
+        [0, 0, 0, 0, -1, 1, 1, 0, 0, 0],
+        [0, 0, 0, 0, 1, 1, -1, 0, 0, 0]
+      ],
+      [
+        [0, 0, 0, 0, -1, -1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, -1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
+        [0, 0, 0, 0, -1, 1, 0, 0, 0, 0]
+      ]
+    ];
+    this.positionNumber = Math.floor(Math.random() * (this.positions.length));
+    this.matrix = this.positions[this.positionNumber];
+  }
+}
+class TShape extends Tetromino {
+  constructor() {
+    super();
+    this.positions = [
+      [
+        [0, 0, 0, 0, -1, 0, -1, 0, 0, 0],
+        [0, 0, 0, 0, -1, 0, -1, 0, 0, 0],
+        [0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+        [0, 0, 0, 0, -1, 1, -1, 0, 0, 0]
+      ],
+      [
+        [0, 0, 0, 0, -1, -1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, -1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, -1, 0, 0, 0, 0]
+      ],
+      [
+        [0, 0, 0, 0, -1, 0, -1, 0, 0, 0],
+        [0, 0, 0, 0, -1, 0, -1, 0, 0, 0],
+        [0, 0, 0, 0, -1, 1, -1, 0, 0, 0],
+        [0, 0, 0, 0, 1, 1, 1, 0, 0, 0]
+      ],
+      [
+        [0, 0, 0, 0, -1, -1, 0, 0, 0, 0],
+        [0, 0, 0, 0, -1, 1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 1, 1, 0, 0, 0, 0],
+        [0, 0, 0, 0, -1, 1, 0, 0, 0, 0]
+      ]
+    ];
+    this.positionNumber = Math.floor(Math.random() * (this.positions.length));
+    this.matrix = this.positions[this.positionNumber];
+  }
+}
 
 let myGame = new Game();
