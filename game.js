@@ -123,9 +123,10 @@ class Tetromino { //all tetrominoes will be extended from this class
   constructor() {
     this.bottomCoordinate = 3; //add it to render martix
   }
-  move(direction) {
-    switch(direction) {
-      case("right"):
+  move(event) {
+    console.log(event);
+    switch(event) { //here is bug, when you can collide figure with ground if press right or left
+      case("ArrowRight"):
         for (let position of this.positions) {
           for (let line of position) {
             if (line[9] == 0) { //I will improve this check
@@ -134,7 +135,7 @@ class Tetromino { //all tetrominoes will be extended from this class
           }
         }
         break;
-      case("left"):
+      case("ArrowLeft"):
         for (let position of this.positions) {
           for (let line of position) {
             if (line[0] == 0) { //I will improve this check
@@ -143,7 +144,7 @@ class Tetromino { //all tetrominoes will be extended from this class
           }
         }
         break;
-      case("turn"):
+      case("Space"):
         this.positionNumber = this.positionNumber == (this.positions.length - 1) ? 0 : ++this.positionNumber;
         this.matrix = this.positions[this.positionNumber];
         break;
@@ -329,3 +330,8 @@ class TShape extends Tetromino {
 }
 
 let myGame = new Game();
+let moveFigure = function(event) {
+  myGame.shape.move(event.code);
+  myGame.renderField();
+};
+document.addEventListener("keydown", moveFigure);
