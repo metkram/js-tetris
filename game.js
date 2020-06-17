@@ -44,9 +44,19 @@ class Game {
         }
       }
     }
+    this.burnALine();
     this.shapePool.shift();
     this.shapePool.push(this.newShape());
     this.shape = this.shapePool[0];
+  }
+  burnALine() {
+    for (let i = this.matrix.length - 2; i > 3; i--) {
+      if (!this.matrix[i].includes(0)) {
+        for (let u = i; u > 0; u--) {
+          this.matrix[u] = this.matrix[u - 1];
+        }
+      }
+    }
   }
 
   // nextFigure() { //maybe I do not need this function if I add bottom figure and renderField will write field
