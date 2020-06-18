@@ -7,7 +7,7 @@ class Game {
     this.shapePool = [this.newShape(), this.newShape()];
     this.shape = this.shapePool[0];
     this.renderField();
-    setInterval(() => this.step(), 500);
+    this.interval = setInterval(() => this.step(), 500);
     setTimeout(() => this.shape.move("right"), 1000);
     setTimeout(() => this.shape.move("right"), 2000);
     setTimeout(() => this.shape.move("right"), 3000);
@@ -28,6 +28,14 @@ class Game {
       }
     }
     this.shape.bottomCoordinate++;
+  }
+  speedUp() {
+    clearInterval(this.interval);
+    this.interval = setInterval(() => this.step(), 100);
+  }
+  speedDown() {
+    clearInterval(this.interval);
+    this.interval = setInterval(() => this.step(), 500);
   }
   addFigureToMatrix(topLine) {
     for (let i = 0; i < 4; i++) {
@@ -55,6 +63,7 @@ class Game {
         for (let u = i; u > 0; u--) {
           this.matrix[u] = this.matrix[u - 1];
         }
+        i++;
       }
     }
   }
@@ -134,8 +143,9 @@ class Tetromino { //all tetrominoes will be extended from this class
     this.bottomCoordinate = 3; //add it to render martix
   }
   move(event) {
+    // if (event.repeat) return;
     console.log(event);
-    switch(event) { //here is bug, when you can collide figure with ground if press right or left
+    switch(event) { //here is bug, when you can collide figure with ground if press right or left, I will try to find out how to fix it
       case("ArrowRight"):
         for (let position of this.positions) {
           for (let line of position) {
@@ -159,6 +169,7 @@ class Tetromino { //all tetrominoes will be extended from this class
         this.matrix = this.positions[this.positionNumber];
         break;
     }
+
   }
 }
 class IShape extends Tetromino {
@@ -341,7 +352,23 @@ class TShape extends Tetromino {
 
 let myGame = new Game();
 let moveFigure = function(event) {
-  myGame.shape.move(event.code);
-  myGame.renderField();
+  if (event.repeat) { //multiple left-right moves don't work, but at least plummet works
+    return;
+  } else {
+    myGame.shape.move(event.code);
+    myGame.renderField();
+  }
 };
+let speedUp = function(event) {
+  if (event.repeat) {
+    return;
+  } else if (event.code == "ArrowDown") {
+    myGame.speedUp();
+  }
+}
+let speedDown = function(event) {
+  if (event.code == "ArrowDown") myGame.speedDown();
+}
 document.addEventListener("keydown", moveFigure);
+document.addEventListener("keydown", speedUp);
+document.addEventListener("keyup", speedDown);
