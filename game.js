@@ -6,28 +6,23 @@ class Game {
     this.matrix = this.newMatrix();
     this.shapePool = [this.newShape(), this.newShape()];
     this.shape = this.shapePool[0];
+    this.steps = 0;
     this.renderField();
     this.interval = setInterval(() => this.step(), 500);
-    setTimeout(() => this.shape.move("right"), 1000);
-    setTimeout(() => this.shape.move("right"), 2000);
-    setTimeout(() => this.shape.move("right"), 3000);
-    setTimeout(() => this.shape.move("left"), 11000);
-    setTimeout(() => this.shape.move("left"), 12000);
-    setTimeout(() => this.shape.move("left"), 13000);
   }
   step() {
     // this.nextFigure();
+    this.shape.bottomCoordinate++;
     this.renderField();
     console.log(this.shape.bottomCoordinate);
     for (let i = 3; i > 0; i--) {
-      for (let u = 0; u < 10; u++) {
+      for (let u = 0; u < 10; u++) { //I guess the problem is here, when it checks 3, 2 or 1 row of shape matrix
         if (this.shape.matrix[i][u] == 1 && this.shape.matrix[i][u] == this.matrix[this.shape.bottomCoordinate - (3 - i)][u]) {
           this.addFigureToMatrix(this.shape.bottomCoordinate);
           break;
         }
       }
     }
-    this.shape.bottomCoordinate++;
   }
   speedUp() {
     clearInterval(this.interval);
@@ -41,18 +36,23 @@ class Game {
     for (let i = 0; i < 4; i++) {
       for (let u = 0; u < 10; u++) {
         if (this.shape.matrix[i][u] == -1) this.shape.matrix[i][u] = 0;
-        this.matrix[topLine - 4 + i][u] += this.shape.matrix[i][u];
+        if (this.matrix[topLine - 4 + i][u] == 0) this.matrix[topLine - 4 + i][u] = this.shape.matrix[i][u];
       }
     }
+    console.log(this.matrix);
+    console.log(this.steps);
+    console.log(this.shape.matrix);
+    this.burnALine();
     for (let i = 0; i < 4; i++) {
       for (let u = 0; u < 10; u++) {
         if (this.matrix[i][u] == 1) {
           console.log("Game over");
+          console.log(this.matrix);
           this.matrix = this.newMatrix();
         }
       }
     }
-    this.burnALine();
+    this.steps++;
     this.shapePool.shift();
     this.shapePool.push(this.newShape());
     this.shape = this.shapePool[0];
@@ -119,7 +119,7 @@ class Game {
         if (this.matrix[i][u] == 1) this.field.fieldBlocks[i * 10 + u].classList.add("ground");
         this.field.fieldBlocks[i * 10 + u].innerText = this.matrix[i][u];
         if (i > this.shape.bottomCoordinate - 5 && i < this.shape.bottomCoordinate) {
-          if (this.matrix[i][u] != 1 && this.shape.matrix[i - this.shape.bottomCoordinate + 4][u] == 1) {
+          if (this.shape.matrix[i - this.shape.bottomCoordinate + 4][u] == 1) {
             this.field.fieldBlocks[i * 10 + u].innerText = this.shape.matrix[i - this.shape.bottomCoordinate + 4][u];
             this.field.fieldBlocks[i * 10 + u].classList.add(this.shape.constructor.name);
           }
