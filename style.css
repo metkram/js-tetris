@@ -2,11 +2,26 @@ body {
   background-color: #386f3c;
 }
 
+#gameContainer {
+  width: 490px;
+  height: 700px;
+}
+
 #field {
   width: 344px;
   height: 683px;
   border: 1px solid #000;
-  background-color: #f8faec
+  background-color: #f8faec;
+  float: left;
+}
+
+#nextFigure {
+  width: 140px;
+  height: 160px;
+  border: 1px solid #000;
+  background-color: #f8faec;
+  float: left;
+  text-align: center;
 }
 
 .block-line {

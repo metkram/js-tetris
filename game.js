@@ -102,6 +102,18 @@ class Game {
         this.field.fieldBlocks[i * 10 + u].className = "empty-block";
       }
     }
+    for (let i = 0; i < 4; i++) {
+      for (let u = 0; u < 4; u++) {
+        this.field.nextFigureBlocks[i * 4 + u].className = "empty-block";
+      }
+    }
+    for (let i = 0; i < 4; i++) {
+      for (let u = 0; u < 4; u++) {
+        if (this.shapePool[1].matrix[i][u + 3] == 1) {
+          this.field.nextFigureBlocks[i * 4 + u].classList.add(this.shapePool[1].constructor.name);
+        }
+      }
+    }
     for (let i = 0; i < 24; i++) {
       for (let u = 0; u < 10; u++) {
         if (this.matrix[i][u] == 1) this.field.fieldBlocks[i * 10 + u].classList.add("ground");
@@ -121,7 +133,7 @@ class Field {
   constructor() {
     this.gameField = document.createElement("div");
     this.gameField.id = "field";
-    document.body.append(this.gameField);
+    document.querySelector("#gameContainer").append(this.gameField);
     for (let i = 0; i < 24; i++) {
       let line = document.createElement("div");
       line.className = "line";
@@ -129,12 +141,22 @@ class Field {
         let block = document.createElement("div");
         block.className = "empty-block";
         //block.innerText= i * 10 + u;
-        if (i < 3) block.hidden = true; //uncomment it when will add gravity functionality
+        if (i < 3 || i == 23) block.hidden = true; //uncomment it when will add gravity functionality
         line.append(block);
       }
       this.gameField.append(line)
     }
+    this.nextFigure = document.createElement("div");
+    this.nextFigure.id = "nextFigure";
+    this.nextFigure.innerHTML = "Next Figure<br>";
+    document.querySelector("#gameContainer").append(this.nextFigure);
+    for (let i = 0; i < 16; i++) {
+      let newBlock = document.createElement("div");
+      newBlock.className = "empty-block";
+      this.nextFigure.append(newBlock);
+    }
     this.fieldBlocks = this.gameField.querySelectorAll(".empty-block");
+    this.nextFigureBlocks = this.nextFigure.querySelectorAll(".empty-block");
   }
 }
 
