@@ -17,11 +17,17 @@ body {
 
 #nextFigure {
   width: 140px;
-  height: 160px;
   border: 1px solid #000;
   background-color: #f8faec;
   float: left;
   text-align: center;
+}
+
+#scores {
+  width: 140px;
+  height: 50;
+  text-align: center;
+  font-size: 20px;
 }
 
 .block-line {

@@ -7,8 +7,13 @@ class Game {
     this.shapePool = [this.newShape(), this.newShape()];
     this.shape = this.shapePool[0];
     this.steps = 0;
+    this.scores = 0;
     this.renderField();
     this.interval = setInterval(() => this.step(), 500);
+  }
+  get points() {
+    let points = [0, 40, 100, 300, 1200];
+    return points;
   }
   step() {
     // this.nextFigure();
@@ -46,10 +51,7 @@ class Game {
         if (this.matrix[topLine - 4 + i][u] == 0) this.matrix[topLine - 4 + i][u] = this.shape.matrix[i][u];
       }
     }
-
-    console.log(this.matrix);
     console.log(this.steps);
-    console.log(this.shape.matrix);
     this.burnALine();
     for (let i = 0; i < 4; i++) {
       for (let u = 0; u < 10; u++) {
@@ -57,6 +59,7 @@ class Game {
           console.log("Game over");
           console.log(this.matrix);
           this.matrix = this.newMatrix();
+          this.scores = this.points[0];
         }
       }
     }
@@ -66,16 +69,18 @@ class Game {
     this.shape = this.shapePool[0];
   }
   burnALine() {
+    let lines = 0;
     for (let i = this.matrix.length - 2; i > 3; i--) {
       if (!this.matrix[i].includes(0)) {
         for (let u = i; u > 0; u--) {
           this.matrix[u] = this.matrix[u - 1];
         }
         i++;
+        lines++;
       }
     }
+    this.scores += this.points[lines];
   }
-
   // nextFigure() { //maybe I do not need this function if I add bottom figure and renderField will write field
   //   for (let i = 0; i < 4; i++) {
   //     for (let u = 0; u < 10; u++) {
@@ -104,6 +109,7 @@ class Game {
     return new pool[num]();
   }
   renderField() {
+    this.field.scores.innerText = this.scores;
     for (let i = 0; i < 24; i++) {
       for (let u = 0; u < 10; u++) {
         this.field.fieldBlocks[i * 10 + u].innerText = 0;
@@ -163,6 +169,9 @@ class Field {
       newBlock.className = "empty-block";
       this.nextFigure.append(newBlock);
     }
+    this.scores = document.createElement("div");
+    this.scores.id = "scores";
+    this.nextFigure.append(this.scores);
     this.fieldBlocks = this.gameField.querySelectorAll(".empty-block");
     this.nextFigureBlocks = this.nextFigure.querySelectorAll(".empty-block");
   }
