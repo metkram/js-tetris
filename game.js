@@ -16,7 +16,7 @@ class Game {
     this.renderField();
     console.log(this.shape.bottomCoordinate);
     for (let i = 3; i > 0; i--) {
-      for (let u = 0; u < 10; u++) { //I guess the problem is here, when it checks 3, 2 or 1 row of shape matrix
+      for (let u = 0; u < 10; u++) {
         if (this.shape.matrix[i][u] == 1 && this.shape.matrix[i][u] == this.matrix[this.shape.bottomCoordinate - (3 - i)][u]) {
           this.addFigureToMatrix(this.shape.bottomCoordinate);
           break;
@@ -33,12 +33,20 @@ class Game {
     this.interval = setInterval(() => this.step(), 500);
   }
   addFigureToMatrix(topLine) {
+    let newMatrix = this.newMatrix(); //If I use only one matrix it doesn't last more than 49-52 new figures. I don't know why, so atm I create everytime new matrix
+    for (let i = 0; i < 24; i++) {
+      for (let u = 0; u < 10; u++) {
+        newMatrix[i][u] = this.matrix[i][u];
+      }
+    }
+    this.matrix = newMatrix;
     for (let i = 0; i < 4; i++) {
       for (let u = 0; u < 10; u++) {
         if (this.shape.matrix[i][u] == -1) this.shape.matrix[i][u] = 0;
         if (this.matrix[topLine - 4 + i][u] == 0) this.matrix[topLine - 4 + i][u] = this.shape.matrix[i][u];
       }
     }
+
     console.log(this.matrix);
     console.log(this.steps);
     console.log(this.shape.matrix);
