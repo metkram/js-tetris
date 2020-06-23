@@ -17,7 +17,6 @@ class Game {
   }
   step() {
     // this.nextFigure();
-    this.shape.bottomCoordinate++;
     this.renderField();
     console.log(this.shape.bottomCoordinate);
     for (let i = 3; i > 0; i--) {
@@ -27,6 +26,54 @@ class Game {
           break;
         }
       }
+    }
+    this.shape.bottomCoordinate++;
+  }
+  move(event) {
+    let error = false;
+    switch(event) { //here is bug, when you can collide figure with ground if press right or left, I will try to find out how to fix it
+      case("ArrowRight"):
+        for (let i = 3; i > -1; i--) {
+          for (let u = 0; u < 10; u++) {
+            if (this.shape.matrix[i][u] == 1 && this.matrix[this.shape.bottomCoordinate - (4 - i)][u + 1]) {
+              console.log("hit");
+              error = true;
+              break;
+            }
+          }
+        }
+        if (error) break;
+        for (let position of this.shape.positions) {
+          for (let line of position) {
+            if (line[9] == 0) { //I will improve this check
+              line.unshift(line.pop());
+            }
+          }
+        }
+        break;
+      case("ArrowLeft"):
+        for (let i = 3; i > -1; i--) {
+          for (let u = 0; u < 10; u++) {
+            if (this.shape.matrix[i][u] == 1 && this.matrix[this.shape.bottomCoordinate - (4 - i)][u - 1]) {
+              console.log("hit");
+              error = true;
+              break;
+            }
+          }
+        }
+        if (error) break;
+        for (let position of this.shape.positions) {
+          for (let line of position) {
+            if (line[0] == 0) { //I will improve this check
+              line.push(line.shift());
+            }
+          }
+        }
+        break;
+      case("Space"):
+        this.shape.positionNumber = this.shape.positionNumber == (this.shape.positions.length - 1) ? 0 : ++this.shape.positionNumber;
+        this.shape.matrix = this.shape.positions[this.shape.positionNumber];
+        break;
     }
   }
   speedUp() {
@@ -185,35 +232,34 @@ class Tetromino { //all tetrominoes will be extended from this class
   constructor() {
     this.bottomCoordinate = 3; //add it to render martix
   }
-  move(event) {
-    // if (event.repeat) return;
-    console.log(event);
-    switch(event) { //here is bug, when you can collide figure with ground if press right or left, I will try to find out how to fix it
-      case("ArrowRight"):
-        for (let position of this.positions) {
-          for (let line of position) {
-            if (line[9] == 0) { //I will improve this check
-              line.unshift(line.pop());
-            }
-          }
-        }
-        break;
-      case("ArrowLeft"):
-        for (let position of this.positions) {
-          for (let line of position) {
-            if (line[0] == 0) { //I will improve this check
-              line.push(line.shift());
-            }
-          }
-        }
-        break;
-      case("Space"):
-        this.positionNumber = this.positionNumber == (this.positions.length - 1) ? 0 : ++this.positionNumber;
-        this.matrix = this.positions[this.positionNumber];
-        break;
-    }
-
-  }
+  // move(event) {
+  //   // if (event.repeat) return;
+  //   console.log(event);
+  //   switch(event) { //here is bug, when you can collide figure with ground if press right or left, I will try to find out how to fix it
+  //     case("ArrowRight"):
+  //       for (let position of this.positions) {
+  //         for (let line of position) {
+  //           if (line[9] == 0) { //I will improve this check
+  //             line.unshift(line.pop());
+  //           }
+  //         }
+  //       }
+  //       break;
+  //     case("ArrowLeft"):
+  //       for (let position of this.positions) {
+  //         for (let line of position) {
+  //           if (line[0] == 0) { //I will improve this check
+  //             line.push(line.shift());
+  //           }
+  //         }
+  //       }
+  //       break;
+  //     case("Space"):
+  //       this.positionNumber = this.positionNumber == (this.positions.length - 1) ? 0 : ++this.positionNumber;
+  //       this.matrix = this.positions[this.positionNumber];
+  //       break;
+  //   }
+  // }
 }
 class IShape extends Tetromino {
   constructor() {
@@ -398,7 +444,7 @@ let moveFigure = function(event) {
   if (event.repeat) { //multiple left-right moves don't work, but at least plummet works
     return;
   } else {
-    myGame.shape.move(event.code);
+    myGame.move(event.code);
     myGame.renderField();
   }
 };
