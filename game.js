@@ -109,7 +109,7 @@ class Game {
     return new pool[num]();
   }
   renderField() {
-    this.field.scores.innerText = this.scores;
+    this.field.scores.innerText = "Scores: " + this.scores;
     for (let i = 0; i < 24; i++) {
       for (let u = 0; u < 10; u++) {
         this.field.fieldBlocks[i * 10 + u].innerText = 0;
@@ -171,7 +171,11 @@ class Field {
     }
     this.scores = document.createElement("div");
     this.scores.id = "scores";
+    this.rules = document.createElement("div");
+    this.rules.id = "rules";
+    this.rules.innerHTML = "<hr><center>Buttons:</center>⇦ - move left<br>⇨ - move right<br>⇩ - speed up<br>⎵ - turn the figure<hr>";
     this.nextFigure.append(this.scores);
+    this.nextFigure.append(this.rules);
     this.fieldBlocks = this.gameField.querySelectorAll(".empty-block");
     this.nextFigureBlocks = this.nextFigure.querySelectorAll(".empty-block");
   }
