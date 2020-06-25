@@ -8,8 +8,10 @@ class Game {
     this.shape = this.shapePool[0];
     this.steps = 0;
     this.scores = 0;
-    this.renderField();
-    this.interval = setInterval(() => this.step(), 500);
+    this.speed = 500;
+    setInterval(() => this.renderField(), 50);
+    // this.interval = setInterval(() => this.step(), 500);
+    setTimeout(() => this.step(), this.speed);
   }
   get points() {
     let points = [0, 40, 100, 300, 1200];
@@ -17,7 +19,7 @@ class Game {
   }
   step() {
     // this.nextFigure();
-    this.renderField();
+    // this.renderField();
     console.log(this.shape.bottomCoordinate);
     for (let i = 3; i > 0; i--) {
       for (let u = 0; u < 10; u++) {
@@ -28,6 +30,7 @@ class Game {
       }
     }
     this.shape.bottomCoordinate++;
+    setTimeout(() => this.step(), this._speed);
   }
   move(event) {
     let error = false;
@@ -76,13 +79,15 @@ class Game {
         break;
     }
   }
-  speedUp() {
-    clearInterval(this.interval);
-    this.interval = setInterval(() => this.step(), 100);
+  set speed(v) {
+    this._speed = v;
+    // clearInterval(this.interval);
+    // this.interval = setInterval(() => this.step(), 100);
   }
-  speedDown() {
-    clearInterval(this.interval);
-    this.interval = setInterval(() => this.step(), 500);
+  get speed() {
+    return this._speed;
+    // clearInterval(this.interval);
+    // this.interval = setInterval(() => this.step(), 100);
   }
   addFigureToMatrix(topLine) {
     let newMatrix = this.newMatrix(); //If I use only one matrix it doesn't last more than 49-52 new figures. I don't know why, so atm I create everytime new matrix
@@ -445,18 +450,24 @@ let moveFigure = function(event) {
     return;
   } else {
     myGame.move(event.code);
-    myGame.renderField();
+    // myGame.renderField();
   }
 };
 let speedUp = function(event) {
-  if (event.repeat) {
-    return;
-  } else if (event.code == "ArrowDown") {
-    myGame.speedUp();
-  }
+  if (event.code == "ArrowDown") myGame.speed = 100;
+  // if (event.repeat) {
+  //   // return;
+  // } else if (event.code == "ArrowDown") {
+  //   myGame.speedUp();
+  // }
 }
 let speedDown = function(event) {
-  if (event.code == "ArrowDown") myGame.speedDown();
+  if (event.code == "ArrowDown") myGame.speed = 500;
+  // if (event.repeat) {
+  //   // return;
+  // } else if (event.code == "ArrowDown") {
+  //   myGame.speedDown();
+  // }
 }
 document.addEventListener("keydown", moveFigure);
 document.addEventListener("keydown", speedUp);
