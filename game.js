@@ -105,7 +105,7 @@ class Game {
     }
     console.log(this.steps);
     this.burnALine();
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 3; i++) {
       for (let u = 0; u < 10; u++) {
         if (this.matrix[i][u] == 1) {
           console.log("Game over");
@@ -446,12 +446,12 @@ class TShape extends Tetromino {
 
 let myGame = new Game();
 let moveFigure = function(event) {
-  if (event.repeat) { //multiple left-right moves don't work, but at least plummet works
-    return;
-  } else {
+  // if (event.repeat) { //multiple left-right moves don't work, but at least plummet works
+  //   return;
+  // } else {
     myGame.move(event.code);
     // myGame.renderField();
-  }
+  // }
 };
 let speedUp = function(event) {
   if (event.code == "ArrowDown") myGame.speed = 100;
