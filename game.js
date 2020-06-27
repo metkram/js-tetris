@@ -6,10 +6,11 @@ class Game {
     this.matrix = this.newMatrix();
     this.shapePool = [this.newShape(), this.newShape()];
     this.shape = this.shapePool[0];
+    this.level = 1;
     this.steps = 0;
     this.scores = 0;
-    this.speed = 500;
-    setInterval(() => this.renderField(), 50);
+    this.speed = 1000 - (50 * (this.level - 1)) + 5 * this.level; //have to improve this formula
+    setInterval(() => this.renderField(), 10);
     // this.interval = setInterval(() => this.step(), 500);
     setTimeout(() => this.step(), this.speed);
   }
@@ -73,6 +74,9 @@ class Game {
           }
         }
         break;
+      case("ArrowDown"): //on the first levels aceleration works bad because it start only when current step() is over, it cat last up to 1 second
+        this.speed = 50;
+        break;
       case("Space"):
         this.shape.positionNumber = this.shape.positionNumber == (this.shape.positions.length - 1) ? 0 : ++this.shape.positionNumber;
         this.shape.matrix = this.shape.positions[this.shape.positionNumber];
@@ -108,8 +112,11 @@ class Game {
     for (let i = 0; i < 3; i++) {
       for (let u = 0; u < 10; u++) {
         if (this.matrix[i][u] == 1) {
+          alert(this.scores);
           console.log("Game over");
           console.log(this.matrix);
+          this.level = 1;
+          this.speed = 1000 - (50 * (this.level - 1));
           this.matrix = this.newMatrix();
           this.scores = this.points[0];
         }
@@ -119,6 +126,7 @@ class Game {
     this.shapePool.shift();
     this.shapePool.push(this.newShape());
     this.shape = this.shapePool[0];
+    this.speed = 1000 - (50 * (this.level - 1)) + 5 * this.level;
   }
   burnALine() {
     let lines = 0;
@@ -131,7 +139,8 @@ class Game {
         lines++;
       }
     }
-    this.scores += this.points[lines];
+    this.scores += this.points[lines] * this.level;
+    if (lines) this.level++;
   }
   // nextFigure() { //maybe I do not need this function if I add bottom figure and renderField will write field
   //   for (let i = 0; i < 4; i++) {
@@ -161,7 +170,7 @@ class Game {
     return new pool[num]();
   }
   renderField() {
-    this.field.scores.innerText = "Scores: " + this.scores;
+    this.field.scores.innerHTML = "Level: " + this.level + "<br>Scores: " + this.scores;
     for (let i = 0; i < 24; i++) {
       for (let u = 0; u < 10; u++) {
         this.field.fieldBlocks[i * 10 + u].innerText = 0;
@@ -453,16 +462,10 @@ let moveFigure = function(event) {
     // myGame.renderField();
   // }
 };
-let speedUp = function(event) {
-  if (event.code == "ArrowDown") myGame.speed = 100;
-  // if (event.repeat) {
-  //   // return;
-  // } else if (event.code == "ArrowDown") {
-  //   myGame.speedUp();
-  // }
-}
+
 let speedDown = function(event) {
-  if (event.code == "ArrowDown") myGame.speed = 500;
+  setTimeout(() => {}, 200);
+  if (event.code == "ArrowDown") myGame.speed = 1000 - (50 * (myGame.level - 1)) + 5 * myGame.level;
   // if (event.repeat) {
   //   // return;
   // } else if (event.code == "ArrowDown") {
@@ -470,5 +473,4 @@ let speedDown = function(event) {
   // }
 }
 document.addEventListener("keydown", moveFigure);
-document.addEventListener("keydown", speedUp);
 document.addEventListener("keyup", speedDown);

@@ -27,6 +27,7 @@ body {
   width: 140px;
   text-align: center;
   font-size: 19px;
+  float: left;
 }
 
 #rules {
