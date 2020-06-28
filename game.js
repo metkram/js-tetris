@@ -9,10 +9,10 @@ class Game {
     this.level = 1;
     this.steps = 0;
     this.scores = 0;
-    this.speed = 1000 - (50 * (this.level - 1)) + 5 * this.level; //have to improve this formula
+    this.speed = 1000 - (50 * (this.level - 1)) + 5 * this.level; //have to improve this formula, after 22 level it becomes impossible to play
     setInterval(() => this.renderField(), 10);
     // this.interval = setInterval(() => this.step(), 500);
-    setTimeout(() => this.step(), this.speed);
+    setTimeout(() => this.nextStep(), this.speed);
   }
   get points() {
     let points = [0, 40, 100, 300, 1200];
@@ -31,7 +31,10 @@ class Game {
       }
     }
     this.shape.bottomCoordinate++;
-    setTimeout(() => this.step(), this._speed);
+  }
+  nextStep() { //I need this function to create more smoothly plummet and left-right movements
+    this.step();
+    setTimeout(() => this.nextStep(), this._speed);
   }
   move(event) {
     let error = false;
@@ -76,6 +79,7 @@ class Game {
         break;
       case("ArrowDown"): //on the first levels aceleration works bad because it start only when current step() is over, it cat last up to 1 second
         this.speed = 50;
+        this.step();
         break;
       case("Space"):
         this.shape.positionNumber = this.shape.positionNumber == (this.shape.positions.length - 1) ? 0 : ++this.shape.positionNumber;
@@ -455,6 +459,7 @@ class TShape extends Tetromino {
 
 let myGame = new Game();
 let moveFigure = function(event) {
+  if (event.code == "ArrowDown" && event.repeat) return;
   // if (event.repeat) { //multiple left-right moves don't work, but at least plummet works
   //   return;
   // } else {
